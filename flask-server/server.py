@@ -6,6 +6,10 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
+@app.route('/')  # prevents 404 error
+def home():
+    return "Flask server is running!"
+
 @app.route("/materials")
 def materials():
     # retrieve data

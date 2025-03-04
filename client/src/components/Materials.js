@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import interact from 'interactjs';
 
 function Materials() {
+  // State variables to store fetched materials, loading state, and errors
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); //track loading
   const [error, setError] = useState(null);
 
+  //fetches materials from flask backend
   useEffect(() => {
-    fetch('/materials')
+    fetch('http://localhost:5000/materials') //ensures flask server is runnings
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -14,7 +17,7 @@ function Materials() {
         return response.json();
       })
       .then((data) => {
-        setData(data);
+        setData(data); //store fetched materials in state
         setLoading(false);
         console.log(data); // confirm data sent
       })
@@ -23,6 +26,36 @@ function Materials() {
         setLoading(false);
       });
   }, []); // Empty dependency array means this runs once when the component mounts (runs once)
+
+
+  //Initialize Interact.js to make materials draggable
+  useEffect(() => {
+    interact('.draggable').draggable({
+      inertia: true, // smooth dragging
+      modifiers: [
+        interact.modifiers.restrictRect({
+          restriction: 'parent', //keep items inside parent containers
+          endOnly: true
+        })
+      ],
+      autoScroll: true, // auto-scroll when dragging near edgess
+      listeners: {
+        //function that moved the dragged element
+        move(event) {
+          const target = event.target;
+          let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+          let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+          
+          //apply translation transform to move the element
+          target.style.transform = `translate(${x}px, ${y}px)`;
+          
+          //store new positions in attributes for tracking
+          target.setAttribute('data-x', x);
+          target.setAttribute('data-y', y);
+        }
+      }
+    });
+  }, [data]); //Re-run drag setup when new materials are fetched
 
   if (loading) {
     return <div>Loading...</div>;
@@ -42,7 +75,9 @@ function Materials() {
       <h1>Materials</h1>
       <ul>
         {data.map((material, i) => (
-          <li key={i}>{material.emoji} {material.name}</li>
+          <li key={i} className="draggable" style={{ cursor: 'grab', display: 'inline-block', padding: '10px', margin: '5px', background: '#ddd' }}>
+            {material.emoji} {material.name}
+            </li>
         ))}
       </ul>
     </div>
