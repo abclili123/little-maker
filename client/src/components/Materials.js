@@ -9,7 +9,7 @@ function Materials() {
 
   //fetches materials from flask backend
   useEffect(() => {
-    fetch('http://localhost:5000/materials') //ensures flask server is runnings
+    fetch('/materials') //ensures flask server is runnings
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
