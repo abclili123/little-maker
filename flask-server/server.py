@@ -90,7 +90,7 @@ def tools():
     results = conn.execute(query).fetchall()
 
     tools_data = [
-        {"tool name": row[0], "link": row[1] or "", "description": row[2], "img": "public/assets/tool_images/" + row[0].lower().replace(" ", "_")} for row in results
+        {"tool name": row[0], "link": row[1] or "", "description": row[2], "img": "assets/tool_images/" + row[0].lower().replace(" ", "_") + ".png"} for row in results
     ]
 
     return jsonify(tools_data)
