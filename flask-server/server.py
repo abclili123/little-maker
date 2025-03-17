@@ -27,10 +27,48 @@ def materials():
 
     results = conn.execute(query).fetchall()
 
-    # convert to list of dictionaries
-    materials_data = [
-        {"name": row[0], "tags": row[1] or ""} for row in results
-    ]
+    TAG_EMOJI_MAP = {
+        "3D Printing": "🖨️",
+        "Adhesive": "🩹",
+        "Jewelry": "💍",
+        "Electronics": "🔌",
+        "Paper": "📄",
+        "Bookbinding": "📚",
+        "Marbling": "🌊",
+        "Paint": "🎨",
+        "Vinyl": "💿",
+        "Screen Printing": "🖼️",
+        "Sewing": "🧵",
+        "Embroidery": "🪡",
+        "Textile": "🧶",
+        "Other": "🛠️",
+        "Stained Glass": "🪟",
+        "Rug Tufting": "🪞",
+        "Embroidery": "🪡",
+        "Dye Sublimation": "🎭",
+        "Leatherworking": "👞",
+        "Woodworking": "🪓",
+        "Fasteners": "🔩",
+        "Sanding": "🪚",
+        "Lasercutting": "🔦",
+        "CNC": "🛠️"
+    }
+
+    materials_data = []
+    for row in results:
+        tags = []
+        if row[1]:
+            temp_tags = row[1].split(",")
+            for tag in temp_tags:
+                tags.append(tag.strip())
+
+        materials_data.append(
+            {
+                "name": row[0], 
+                "tags": tags, 
+                "emoji": TAG_EMOJI_MAP.get(tags[0]) if len(tags) > 0 else ""
+            }
+        )
 
     conn.close()
 
@@ -120,8 +158,6 @@ def create_database():
     # tools_db = os.path.join(data_dir, 'tools.db')
     # if not os.path.exists(tools_db): 
     #     create_tools_database(tools_db)
-        
-        
 
 if __name__ == '__main__':
     create_database()
