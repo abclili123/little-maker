@@ -72,12 +72,29 @@ def materials():
 
     conn.close()
 
+    # TODO: fix query/ move logic so not iterating over whole db for search 
     # filter by name if query is provided
     query_name = request.args.get("name")
     if query_name:
         materials_data = [m for m in materials_data if query_name.lower() in m["name"].lower()]
 
     return jsonify(materials_data)
+
+@app.route("/tools")
+def tools():
+    # connect to db
+    conn = duckdb.connect(os.path.join(data_dir, 'tools.db'))
+
+    # get tools
+    query = "SELECT * FROM tools;"
+    results = conn.execute(query).fetchall()
+
+    tools_data = [
+        {"tool name": row[0], "link": row[1] or "", "description": row[2], "img": "public/assets/tool_images/" + row[0].lower().replace(" ", "_")} for row in results
+    ]
+
+    return jsonify(tools_data)
+
 
 def create_materials_database(materials_db):
     # connect to db
@@ -141,6 +158,18 @@ def create_tools_database(tools_db):
     # connect to db
     conn = duckdb.connect(tools_db)
 
+    # read all data into the table
+    conn.execute("""
+        CREATE TABLE tools (
+            tool_name TEXT,
+            link TEXT,
+            description TEXT,
+        );
+    """)
+
+    conn.execute(f"COPY tools FROM '{os.path.join(data_dir, 'tools.csv')}' (HEADER, DELIMITER ',');")
+
+    conn.close()
 
 def create_database():
     # create data directory if not exists
@@ -155,9 +184,9 @@ def create_database():
         create_materials_database(materials_db)
 
     # check if tools.db exists
-    # tools_db = os.path.join(data_dir, 'tools.db')
-    # if not os.path.exists(tools_db): 
-    #     create_tools_database(tools_db)
+    tools_db = os.path.join(data_dir, 'tools.db')
+    if not os.path.exists(tools_db): 
+        create_tools_database(tools_db)
 
 if __name__ == '__main__':
     create_database()
