@@ -1,8 +1,9 @@
 # variables
 .env
 
-# flask environment
+# flask environment and databases
 flask-server/venv
+*.db
 
 ## this is react .gitignore, not sure if im transfering this correctly...
 # dependencies
