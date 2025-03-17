@@ -4,6 +4,12 @@ from flask import Flask, jsonify, request
 import duckdb
 import os
 import pandas as pd
+from apify_client import ApifyClient
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.getenv('INSTRUCTABLES_KEY')
+api_client = ApifyClient(api_key)
 
 app = Flask(__name__)
 data_dir = "data" # data directory
@@ -95,6 +101,75 @@ def tools():
 
     return jsonify(tools_data)
 
+@app.route("/generate")
+def generate_ideas():
+    # sample results
+    results = [{
+        "type": "project",
+        "url": "https://www.instructables.com/Automatic-Light-Up-Altered-Carbon-Hello-Unicorn-Ba",
+        "title": "Automatic Light Up Altered Carbon Hello Unicorn Backpack",
+        "isFeatured": True,
+        "numberOfViews": 28147,
+        "numberOfLikes": 41,
+        "numberOfComments": 22
+        },
+        {
+        "type": "project",
+        "url": "https://www.instructables.com/Light-for-life-Shining-bright-cycling-jacket",
+        "title": "Light for Life: Glowing Button Cycling Jacket",
+        "isFeatured": True,
+        "numberOfViews": 55798,
+        "numberOfLikes": 232,
+        "numberOfComments": 38
+        },
+        {
+        "type": "project",
+        "url": "https://www.instructables.com/turn-signal-biking-jacket",
+        "title": "Turn Signal Biking Jacket",
+        "isFeatured": True,
+        "numberOfViews": 578508,
+        "numberOfLikes": 1928,
+        "numberOfComments": 257
+        },
+        {
+        "type": "project",
+        "url": "https://www.instructables.com/Lithium-Rain-Radiant-Beacon-of-Righteousness-Blin",
+        "title": "Lithium Rain Radiant Beacon of Righteousness (Blinking I-hoodie)",
+        "isFeatured": True,
+        "numberOfViews": 11735,
+        "numberOfLikes": 52,
+        "numberOfComments": 36
+        },
+        {
+        "type": "project",
+        "url": "https://www.instructables.com/Work-It-Out-An-interactive-fitness-motivation-syst",
+        "title": "Work It Out: an Interactive Fitness Motivation System",
+        "isFeatured": False,
+        "numberOfViews": 5784,
+        "numberOfLikes": 22,
+        "numberOfComments": 4
+    }]
+
+    # search_terms = request.args.get("search_terms")
+    # # Prepare the Actor input
+    # run_input = {
+    #     "search": search_terms,
+    #     "maxItems": 5,
+    #     "extendOutputFunction": "($) => { return {} }",
+    #     "customMapFunction": "(object) => { return {...object} }",
+    #     "proxy": { "useApifyProxy": True },
+    # }
+
+    # # Run the Actor and wait for it to finish
+    # run = api_client.actor("epctex/instructables-scraper").call(run_input=run_input)
+
+    # # Fetch and print Actor results from the run's dataset (if there are any)
+    # print("💾 Check your data here: https://console.apify.com/storage/datasets/" + run["defaultDatasetId"])
+    # for item in api_client.dataset(run["defaultDatasetId"]).iterate_items():
+    #     print(item)
+    #     # need to format response before returning
+
+    return jsonify(results)
 
 def create_materials_database(materials_db):
     # connect to db
