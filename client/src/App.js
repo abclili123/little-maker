@@ -1,5 +1,6 @@
 import './App.css';
 import Materials from "./components/Materials.js";
+import Tools from "./components/Tools.js";
 import Table from "./components/Table.js";
 // import React, { useState, useEffect } from "react";
 
@@ -11,7 +12,7 @@ function App() {
         {/* div for table-container */}
         <Table/>
       {/* div for sidebar-container */}
-        {/* put the tools component in here */}
+        <Tools/>
         <Materials/>
     </div>
   );

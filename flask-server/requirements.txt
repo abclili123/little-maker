@@ -1,3 +1,5 @@
 python-dotenv
 apify-client
 flask
+duckdb
+pandas
