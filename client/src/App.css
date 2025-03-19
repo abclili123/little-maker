@@ -1,1 +1,85 @@
-/* style app here */
+/* Ensure full height layout */
+.App {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  /* Optional: Customize the header slightly */
+  header, .row.border-bottom {
+    background-color: #f8f9fa;  /* Light grey background */
+  }
+  
+  /* Optional: Style the help button if needed */
+  .btn.rounded-circle {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 40px;
+  }
+  
+  /* Workspace (Table area) tweaks if needed */
+  .workspace-container {
+    background-color: #fff;
+    min-height: 100%;
+  }
+  
+  /* Sidebar section */
+  .sidebar-container {
+    background-color: #f9f9f9;
+  }
+  
+  /* Encyclopedia box at the bottom */
+  .encyclopedia {
+    background-color: #e9ecef;  /* Bootstrap light grey */
+    border-radius: 0.25rem;
+    text-align: center;
+  }
+  
+  /* Optional: Add padding or border for visual separation */
+  .Tools, .Materials {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Ensure the Table fills the space */
+  .Table {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Responsive text adjustments if needed */
+  h1 {
+    font-size: 2rem;
+  }
+  
+  p {
+    margin: 0;
+  }  
+
+  .dropzone {
+    background: #149F84;
+    width: 406px;
+    height: 206px;
+    margin: auto;
+    border: 2px solid #117d68;
+    border-radius: 3px;
+    align-content: center;
+    text-align: center;
+  }
+  
+  .table-grid {
+    position: relative;
+    
+    background-image: 
+      linear-gradient(to right, #f7f7c6 2px, transparent 1px),
+      linear-gradient(to bottom, #f7f7c6 2px, transparent 1px);
+    background-size: 40px 40px;  /* line width + grid size */
+    background-position: 0 0;
+  }
+
+  .workspace {
+    
+  }

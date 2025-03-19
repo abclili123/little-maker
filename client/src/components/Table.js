@@ -28,22 +28,11 @@ const Table = () => {
     //havent done more error checks
 
     return (
-        <div>
-          <h2>Table</h2>
+        <div class="workspace">
           <div
-            className="dropzone"
-            style={{
-              width: '400px',
-              height: '200px',
-              background: 'lightgreen',
-              margin: '20px auto',
-              border: '2px dashed black',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            class="dropzone table-grid"
           >
-            Drop Materials Here
+
           </div>
           <button onClick={handleMakeIt} style={{ marginTop: '10px' }}>
             Make It!
