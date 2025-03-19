@@ -28,15 +28,17 @@ const Table = () => {
     //havent done more error checks
 
     return (
+      <div class="left-content">
         <div class="workspace">
           <div
             class="dropzone table-grid"
           >
 
           </div>
-          <button onClick={handleMakeIt} style={{ marginTop: '10px' }}>
+          <button onClick={handleMakeIt} class="make-button">
             Make It!
           </button>
+        </div>
         </div>
     );
 };

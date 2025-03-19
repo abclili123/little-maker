@@ -8,20 +8,20 @@ import Table from "./components/Table.js";
 function App() {
   return (
     <div className="App container-fluid">
-      {/* Header */}
-      <div className="row align-items-center py-3 border-bottom">
-        <div className="col">
-          <h1>Little Maker</h1>
-        </div>
-        <div className="col-auto">
-          <button className="btn btn-secondary rounded-circle">?</button>
-        </div>
-      </div>
 
-      {/* Main Content */}
       <div className="row flex-grow-1" style={{ minHeight: '90vh' }}>
         {/* Left Column - Workspace */}
-        <div className="col-md-7 p-3 border-end">
+        <div className="col-md-7 border-end">
+          
+        <div className="row align-items-center border-bottom header">
+          <div className="col">
+            <h1>Little Maker</h1>
+          </div>
+          <div className="col-auto">
+            <button className="btn btn-secondary rounded-circle">?</button>
+          </div>
+        </div>
+
           <Table />
         </div>
 

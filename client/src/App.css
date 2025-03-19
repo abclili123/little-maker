@@ -4,20 +4,23 @@
     flex-direction: column;
     height: 100vh;
   }
-  
-  /* Optional: Customize the header slightly */
-  header, .row.border-bottom {
-    background-color: #f8f9fa;  /* Light grey background */
+
+  .header {
+    padding: 10px 20px;
+    padding-bottom: 5px;
   }
   
   /* Optional: Style the help button if needed */
   .btn.rounded-circle {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     padding: 0;
     text-align: center;
-    font-size: 1.2rem;
-    line-height: 40px;
+    font-size: 15px;
+    line-height: 10px;
+    border: 1px solid rgb(70, 70, 70);
+    background-color: white;
+    color: rgb(70, 70, 70);
   }
   
   /* Workspace (Table area) tweaks if needed */
@@ -38,21 +41,19 @@
     text-align: center;
   }
   
-  /* Optional: Add padding or border for visual separation */
   .Tools, .Materials {
     padding-bottom: 1rem;
     border-bottom: 1px solid #ddd;
   }
   
-  /* Ensure the Table fills the space */
   .Table {
     width: 100%;
     height: 100%;
   }
   
-  /* Responsive text adjustments if needed */
   h1 {
-    font-size: 2rem;
+    font-size: 28px;
+    font-weight: 200;
   }
   
   p {
@@ -61,10 +62,10 @@
 
   .dropzone {
     background: #149F84;
-    width: 406px;
-    height: 206px;
+    width: 452px;
+    height: 212px;
     margin: auto;
-    border: 2px solid #117d68;
+    border: 5px solid #149F84;
     border-radius: 3px;
     align-content: center;
     text-align: center;
@@ -81,5 +82,23 @@
   }
 
   .workspace {
-    
+    height: 100%;
+  }
+
+  .make-button {
+    font-size: 12px;
+    padding: 5px 20px;
+    border-radius: 8px;
+    margin: 20px 0px;
+    margin-left: calc(100% - 90px);
+    border: 1px solid gray;
+    background-color: white;
+  }
+
+  .left-content {
+    height: 100%;
+    width: fit-content;
+    margin: auto;
+    align-items: center;
+    padding-top: 20%;
   }
