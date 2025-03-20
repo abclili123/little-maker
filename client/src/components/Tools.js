@@ -40,14 +40,22 @@ function Tools() {
   return (
     <div>
       <h1>Tools</h1>
-      <ul>
-        {data.map((tool, i) => (
-          <li key={i}>
-            <p>{tool["tool name"]}</p>
-            <img src={process.env.PUBLIC_URL + tool.img} alt={tool["tool name"]} width="100" />
-          </li>
-        ))}
-      </ul>
+
+      <div className="search-bar">
+        <input type="text" placeholder="Search Available Tools" />
+        <img src="/assets/ui_icons/search.svg" alt="Search" className="search-icon" />
+      </div>
+
+      <div class="tools-container">
+        <ul>
+          {data.map((tool, i) => (
+            <li key={i}>
+              <p>{tool["tool name"]}</p>
+              <img src={process.env.PUBLIC_URL + tool.img} alt={tool["tool name"]} width="100" />
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

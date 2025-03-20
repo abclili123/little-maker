@@ -13,7 +13,7 @@ function App() {
         {/* Left Column - Workspace */}
         <div className="col-md-7 border-end">
           
-        <div className="row align-items-center border-bottom header">
+        <div className="row align-items-center header">
           <div className="col">
             <h1>Little Maker</h1>
           </div>
@@ -27,8 +27,12 @@ function App() {
 
         {/* Right Column - Sidebar */}
         <div className="col-md-5 p-3 d-flex flex-column">
-          <Tools />
-          <Materials />
+          <div class="row tool-section border-bottom">
+            <Tools />
+          </div>
+          <div class="row">
+            <Materials />
+          </div>
 
           {/* Encyclopedia pinned at the bottom */}
           <div className="mt-auto p-3 bg-light border rounded">
