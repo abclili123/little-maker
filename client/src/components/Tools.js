@@ -47,14 +47,26 @@ function Tools() {
       </div>
 
       <div class="tools-container">
-        <ul>
-          {data.map((tool, i) => (
-            <li key={i}>
-              <p>{tool["tool name"]}</p>
-              <img src={process.env.PUBLIC_URL + tool.img} alt={tool["tool name"]} width="100" />
-            </li>
-          ))}
-        </ul>
+        <div className="container">
+          <div className="row">
+            {data.map((tool, i) => (
+              <div className="col-4 mb-3 text-center" key={i}>
+                
+                <div class="tool-img-container">
+                  <img 
+                    src={process.env.PUBLIC_URL + tool.img} 
+                    alt={tool["tool name"]} 
+                    width="100" 
+                    class="img-contain"
+                  />
+                </div>
+
+                <p class="tool-label">{tool["tool name"]}</p>
+
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
