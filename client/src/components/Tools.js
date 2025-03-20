@@ -43,7 +43,7 @@ function Tools() {
   // show all tools
   return (
     <div>
-      <h1>Tools</h1>
+      <h1 class="pad-left">Tools</h1>
 
       <div className="search-bar">
         <input type="text" placeholder="Search Available Tools" />
@@ -51,10 +51,10 @@ function Tools() {
       </div>
 
       <div class="tools-container">
-        <div className="container">
+        <div>
           <div className="row">
             {data.map((tool, i) => (
-              <div className="col-4 mb-3 text-center" 
+              <div className="col-4 mb-3 text-center tool-box" 
                    key={i}
                    draggable
                    onDragStart={(e) => handleDragStart(e, tool)}
