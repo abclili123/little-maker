@@ -36,6 +36,10 @@ function Tools() {
     return <div>Error: {error.message}</div>;
   }
 
+  const handleDragStart = (e, tool) => {
+    e.dataTransfer.setData("tool", JSON.stringify(tool));
+  };  
+
   // show all tools
   return (
     <div>
@@ -50,7 +54,11 @@ function Tools() {
         <div className="container">
           <div className="row">
             {data.map((tool, i) => (
-              <div className="col-4 mb-3 text-center" key={i}>
+              <div className="col-4 mb-3 text-center" 
+                   key={i}
+                   draggable
+                   onDragStart={(e) => handleDragStart(e, tool)}
+                   >
                 
                 <div class="tool-img-container">
                   <img 
