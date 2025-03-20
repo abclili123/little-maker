@@ -87,10 +87,6 @@
     background-position: 0 0;
   }
 
-  .workspace {
-    height: 100%;
-  }
-
   .make-button {
     font-size: 12px;
     padding: 5px 20px;
@@ -107,7 +103,6 @@
   }
 
   .left-content {
-    height: 100%;
     width: fit-content;
     margin: auto;
     align-items: center;
@@ -150,6 +145,13 @@
     margin-top: 10px;
   }
 
+  .materials-container {
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 10px 0px;
+    margin-top: 10px;
+  }
+
   .tool-img-container {
     height: 80px;
     width: 80px;
@@ -174,4 +176,13 @@
 
  .pad-left {
     padding-left: 10px;
+ }
+
+ .encyclopedia {
+    background-color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 200;
+    align-items: center;
+    padding-top: 12px;
  }

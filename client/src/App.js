@@ -30,13 +30,13 @@ function App() {
           <div class="row tool-section border-bottom">
             <Tools />
           </div>
-          <div class="row">
+          <div class="row border-bottom">
             <Materials />
           </div>
 
           {/* Encyclopedia pinned at the bottom */}
-          <div className="mt-auto p-3 bg-light border rounded">
-            <p className="mb-0">Encyclopedia</p>
+          <div class="row encyclopedia">
+            <p>Encyclopedia</p>
           </div>
         </div>
       </div>
