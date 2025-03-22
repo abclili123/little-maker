@@ -108,6 +108,20 @@ def generate_ideas():
     with open(os.path.join(data_dir, 'dummy_api.json'), 'r') as file:
         results = json.load(file)
 
+    ideas = []
+    i = 0
+    for result in results:
+        ideas.append(
+            {
+                'id': i,
+                'title': result.get('title'),
+                'image': result.get('steps')[0].get('media')[0].get('src'),
+                'description': result.get('steps')[0].get('body'),
+                'url': result.get('url')
+            }
+        )
+        i+=1
+
     # search_terms = request.args.get("search_terms")
     # # Prepare the Actor input
     # run_input = {
@@ -127,7 +141,7 @@ def generate_ideas():
     #     print(item)
     #     # need to format response before returning
 
-    return jsonify(results)
+    return jsonify(ideas)
 
 def create_materials_database(materials_db):
     # connect to db
