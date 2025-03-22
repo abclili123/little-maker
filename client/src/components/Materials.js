@@ -72,14 +72,17 @@ function Materials() {
   // but we can skip that for this week probably
   return (
     <div>
-      <h1>Materials</h1>
-      <ul>
-        {data.map((material, i) => (
-          <li key={i} className="draggable" style={{ cursor: 'grab', display: 'inline-block', padding: '10px', margin: '5px', background: '#ddd' }}>
-            {material.emoji} {material.name}
-            </li>
-        ))}
-      </ul>
+      <h1 class="header">Materials</h1>
+
+      <div class="materials-container">
+        <ul>
+          {data.map((material, i) => (
+            <li key={i} className="draggable" style={{ cursor: 'grab', display: 'inline-block', padding: '10px', margin: '5px', background: '#ddd' }}>
+              {material.emoji} {material.name}
+              </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
