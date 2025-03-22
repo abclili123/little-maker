@@ -6,6 +6,7 @@ import os
 import pandas as pd
 from apify_client import ApifyClient
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 api_key = os.getenv('INSTRUCTABLES_KEY')
@@ -104,51 +105,8 @@ def tools():
 @app.route("/generate")
 def generate_ideas():
     # sample results
-    results = [{
-        "type": "project",
-        "url": "https://www.instructables.com/Automatic-Light-Up-Altered-Carbon-Hello-Unicorn-Ba",
-        "title": "Automatic Light Up Altered Carbon Hello Unicorn Backpack",
-        "isFeatured": True,
-        "numberOfViews": 28147,
-        "numberOfLikes": 41,
-        "numberOfComments": 22
-        },
-        {
-        "type": "project",
-        "url": "https://www.instructables.com/Light-for-life-Shining-bright-cycling-jacket",
-        "title": "Light for Life: Glowing Button Cycling Jacket",
-        "isFeatured": True,
-        "numberOfViews": 55798,
-        "numberOfLikes": 232,
-        "numberOfComments": 38
-        },
-        {
-        "type": "project",
-        "url": "https://www.instructables.com/turn-signal-biking-jacket",
-        "title": "Turn Signal Biking Jacket",
-        "isFeatured": True,
-        "numberOfViews": 578508,
-        "numberOfLikes": 1928,
-        "numberOfComments": 257
-        },
-        {
-        "type": "project",
-        "url": "https://www.instructables.com/Lithium-Rain-Radiant-Beacon-of-Righteousness-Blin",
-        "title": "Lithium Rain Radiant Beacon of Righteousness (Blinking I-hoodie)",
-        "isFeatured": True,
-        "numberOfViews": 11735,
-        "numberOfLikes": 52,
-        "numberOfComments": 36
-        },
-        {
-        "type": "project",
-        "url": "https://www.instructables.com/Work-It-Out-An-interactive-fitness-motivation-syst",
-        "title": "Work It Out: an Interactive Fitness Motivation System",
-        "isFeatured": False,
-        "numberOfViews": 5784,
-        "numberOfLikes": 22,
-        "numberOfComments": 4
-    }]
+    with open(os.path.join(data_dir, 'dummy_api.json'), 'r') as file:
+        results = json.load(file)
 
     # search_terms = request.args.get("search_terms")
     # # Prepare the Actor input

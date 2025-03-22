@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "framer-motion": "^12.5.0",
     "interact.js": "^1.2.8",
     "interactjs": "^1.10.27",
     "react": "^19.0.0",
