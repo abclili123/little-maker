@@ -25,29 +25,32 @@ const Table = () => {
         // TODO: Later, send these materials to the Instructables API
     };
 
+    const handleDrop = (e) => {
+      e.preventDefault();
+      const toolData = e.dataTransfer.getData("tool");
+      const tool = JSON.parse(toolData);
+      console.log("Dropped Tool:", tool);
+      // You can now render it on the table or update state
+    };
+    
+
     //havent done more error checks
 
     return (
-        <div>
-          <h2>Table</h2>
+      <div class="left-content">
+        <div class="workspace"
+         onDragOver={(e) => e.preventDefault()}
+         onDrop={handleDrop}
+        >
           <div
-            className="dropzone"
-            style={{
-              width: '400px',
-              height: '200px',
-              background: 'lightgreen',
-              margin: '20px auto',
-              border: '2px dashed black',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            class="dropzone table-grid"
           >
-            Drop Materials Here
+
           </div>
-          <button onClick={handleMakeIt} style={{ marginTop: '10px' }}>
+          <button onClick={handleMakeIt} class="make-button">
             Make It!
           </button>
+        </div>
         </div>
     );
 };
