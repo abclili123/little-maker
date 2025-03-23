@@ -186,3 +186,58 @@
     align-items: center;
     padding-top: 12px;
  }
+
+ .idea-card {
+  background: white;
+  height: 32rem;
+  width: 24rem;
+  border-radius: 0.5rem;
+  overflow: hidden; /* Prevents content overflow */
+  border: #ccc solid 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.idea-card:hover {
+  cursor: grab;
+}
+
+.idea-card:active {
+  cursor: grabbing;
+}
+
+.card-image {
+  width: 100%;  /* Ensures full width */
+  height: 50%;  /* Takes up half of the card */
+  object-fit: cover; /* Ensures the image fills the space without distortion */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 50%; /* The other half of the card */
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-description {
+  font-size: 1rem;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 4;
+  -webkit-line-clamp: 4; /* Limits to 4 lines */
+  -webkit-box-orient: vertical;
+}

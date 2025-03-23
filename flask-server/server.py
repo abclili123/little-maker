@@ -109,7 +109,7 @@ def generate_ideas():
         results = json.load(file)
 
     ideas = []
-    i = 0
+    i = 1
     for result in results:
         ideas.append(
             {
