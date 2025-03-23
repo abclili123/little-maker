@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Ideas from './Ideas.js'; // ideas is a child component of table
 import interact from 'interactjs';
 
-const Table = () => {
+const Table = ( {addToEncyclopedia}) => {
     //tracks materials dropped onto table
     const [droppedMaterials, setDroppedMaterials] = useState([]);
+    const [showIdeas, setShowIdeas] = useState(false); // for showing and hiding generated ideas
+    const [ideas, setIdeas] = useState([]); // table will hold ideas since it is the parent component and ideas will be passed as prop
 
     useEffect(() => {
         //initialize Interact.js dropzone
@@ -21,49 +24,55 @@ const Table = () => {
 
     // Function to handle "Make it!" button click
     const handleMakeIt = () => {
-        console.log('Materials on the table:', droppedMaterials);
-        // TODO: Later, send these materials to the Instructables API
+      console.log('Materials on the table:', droppedMaterials);
+      // TODO: Later, send these materials to the Instructables API
+      // right now just fetches dummy data
+      fetch('/generate')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // when api returns, set show ideas to true to show the ideas
+          // this causes re rendering of component to show the ideas
+          setIdeas(data);
+          setShowIdeas(true)
+        })
     };
+
+    const handleDrop = (e) => {
+      e.preventDefault();
+      const toolData = e.dataTransfer.getData("tool");
+      const tool = JSON.parse(toolData);
+      console.log("Dropped Tool:", tool);
+      // You can now render it on the table or update state
+    };
+    
 
     //havent done more error checks
 
     return (
-        <div>
-          <h2>Table</h2>
+      <div class="left-content">
+        <div class="workspace"
+         onDragOver={(e) => e.preventDefault()}
+         onDrop={handleDrop}
+        >
           <div
-            className="dropzone"
-            style={{
-              width: '400px',
-              height: '200px',
-              background: 'lightgreen',
-              margin: '20px auto',
-              border: '2px dashed black',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            class="dropzone table-grid"
           >
-            Drop Materials Here
+
           </div>
-          <button onClick={handleMakeIt} style={{ marginTop: '10px' }}>
+          <button onClick={handleMakeIt} class="make-button">
             Make It!
           </button>
         </div>
+
+        {/* only show ideas when true */}
+        {showIdeas && <Ideas ideas={ideas} setIdeas={setIdeas} addToEncyclopedia={addToEncyclopedia} onClose={() => setShowIdeas(false)} />} 
+      </div>
     );
 };
     
 export default Table;
-
-
-
-
-
-
-
-
-// handles the table drag and drop
-// can also put the make this! button here
-// will call the api here when button clicked so 
-// that would go here
-// for now, clicking button can just print whatever
-// objects are on the table to the console

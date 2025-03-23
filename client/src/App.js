@@ -1,19 +1,52 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Materials from "./components/Materials.js";
 import Tools from "./components/Tools.js";
+import Encyclopedia from "./components/Encyclopedia.js";
 import Table from "./components/Table.js";
-// import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 function App() {
+  const [encyclopediaIdeas, setEncyclopediaIdeas] = useState([]);
+
+  const addToEncyclopedia = (idea) => {
+    setEncyclopediaIdeas((prev) => [...prev, idea]);
+  };
+
   return (
-    <div className="App">
-      {/* This is a comment inside JSX */}
-      {/* div for left side container idk what we named it on the figma */}
-        {/* div for table-container */}
-        <Table/>
-      {/* div for sidebar-container */}
-        <Tools/>
-        <Materials/>
+    <div className="App container-fluid">
+
+      <div className="row flex-grow-1" style={{ minHeight: '90vh' }}>
+        {/* Left Column - Workspace */}
+        <div className="col-md-7 border-end">
+          
+        <div className="row align-items-center header">
+          <div className="col">
+            <h1>Little Maker</h1>
+          </div>
+          <div className="col-auto">
+            <button className="btn btn-secondary rounded-circle">?</button>
+          </div>
+        </div>
+
+          <Table addToEncyclopedia={addToEncyclopedia} />
+        </div>
+
+        {/* Right Column - Sidebar */}
+        <div className="col-md-5 p-3 d-flex flex-column">
+          <div class="row tool-section border-bottom">
+            <Tools />
+          </div>
+          <div class="row border-bottom">
+            <Materials />
+          </div>
+
+          {/* Encyclopedia pinned at the bottom */}
+          <div class="row encyclopedia">
+            <Encyclopedia ideas={encyclopediaIdeas} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
