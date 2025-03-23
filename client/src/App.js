@@ -2,10 +2,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Materials from "./components/Materials.js";
 import Tools from "./components/Tools.js";
+import Encyclopedia from "./components/Encyclopedia.js";
 import Table from "./components/Table.js";
-// import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 function App() {
+  const [encyclopediaIdeas, setEncyclopediaIdeas] = useState([]);
+
+  const addToEncyclopedia = (idea) => {
+    setEncyclopediaIdeas((prev) => [...prev, idea]);
+  };
+
   return (
     <div className="App container-fluid">
 
@@ -22,7 +29,7 @@ function App() {
           </div>
         </div>
 
-          <Table />
+          <Table addToEncyclopedia={addToEncyclopedia} />
         </div>
 
         {/* Right Column - Sidebar */}
@@ -36,7 +43,7 @@ function App() {
 
           {/* Encyclopedia pinned at the bottom */}
           <div class="row encyclopedia">
-            <p>Encyclopedia</p>
+            <Encyclopedia ideas={encyclopediaIdeas} />
           </div>
         </div>
       </div>

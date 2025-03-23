@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
-const Ideas = ({ ideas, setIdeas, onClose }) => {
+const Ideas = ({ ideas, setIdeas, onClose, addToEncyclopedia }) => {
   return (
     <div 
       className="ideas-container"
@@ -22,13 +22,14 @@ const Ideas = ({ ideas, setIdeas, onClose }) => {
         ideas={ideas} 
         setIdeas={setIdeas} 
         onClose={onClose}
+        addToEncyclopedia={addToEncyclopedia}
         {...idea} />
       ))}
     </div>
   );
 };
 
-const Idea = ({ id, title, image, description, ideas, setIdeas, onClose }) => {
+const Idea = ({ id, title, image, description, ideas, setIdeas, onClose, addToEncyclopedia }) => {
   const x = useMotionValue(0);
   const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
   const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0]);
@@ -42,6 +43,10 @@ const Idea = ({ id, title, image, description, ideas, setIdeas, onClose }) => {
 
   const handleDragEnd = () => {
     if (Math.abs(x.get()) > 100) {
+      if (x.get() > 0) {
+        addToEncyclopedia({ id, title, image, description });
+      }
+
       setIdeas((prev) => {
         const updatedIdeas = prev.filter((idea) => idea.id !== id);
         if (updatedIdeas.length === 0) {

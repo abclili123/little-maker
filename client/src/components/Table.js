@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Ideas from './Ideas.js'; // ideas is a child component of table
 import interact from 'interactjs';
 
-const Table = () => {
+const Table = ( {addToEncyclopedia}) => {
     //tracks materials dropped onto table
     const [droppedMaterials, setDroppedMaterials] = useState([]);
     const [showIdeas, setShowIdeas] = useState(false); // for showing and hiding generated ideas
@@ -70,7 +70,7 @@ const Table = () => {
         </div>
 
         {/* only show ideas when true */}
-        {showIdeas && <Ideas ideas={ideas} setIdeas={setIdeas} onClose={() => setShowIdeas(false)} />} 
+        {showIdeas && <Ideas ideas={ideas} setIdeas={setIdeas} addToEncyclopedia={addToEncyclopedia} onClose={() => setShowIdeas(false)} />} 
       </div>
     );
 };
