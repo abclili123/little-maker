@@ -77,7 +77,16 @@ function Materials() {
       <div class="materials-container">
         <ul>
           {data.map((material, i) => (
-            <li key={i} className="draggable" style={{ cursor: 'grab', display: 'inline-block', padding: '10px', margin: '5px', background: '#ddd' }}>
+            <li key={i} className="draggable" 
+              style={{ 
+                  cursor: 'grab', 
+                  display: 'inline-block', 
+                  padding: '10px', 
+                  margin: '5px', 
+                  background: 'white', 
+                  borderRadius: '3px', 
+                  border: 'solid #ccc 1px'
+              }}>
               {material.emoji} {material.name}
               </li>
           ))}
