@@ -11,11 +11,11 @@ function App() {
 
       <div className="row flex-grow-1" style={{ minHeight: '90vh' }}>
         {/* Left Column - Workspace */}
-        <div className="col-md-7 border-end">
+        <div className="col-md-8 border-end">
           
         <div className="row align-items-center header">
           <div className="col">
-            <h1>Little Maker</h1>
+            <h1 class="light-title">Little Maker</h1>
           </div>
           <div className="col-auto">
             <button className="btn btn-secondary rounded-circle">?</button>
@@ -26,7 +26,7 @@ function App() {
         </div>
 
         {/* Right Column - Sidebar */}
-        <div className="col-md-5 p-3 d-flex flex-column">
+        <div className="col-md-4 p-3 d-flex flex-column">
           <div class="row tool-section border-bottom">
             <Tools />
           </div>

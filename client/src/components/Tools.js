@@ -43,7 +43,7 @@ function Tools() {
   // show all tools
   return (
     <div>
-      <h1 class="pad-left">Tools</h1>
+      <h1 class="pad-left light-head">Tools</h1>
 
       <div className="search-bar">
         <input type="text" placeholder="Search Available Tools" />
