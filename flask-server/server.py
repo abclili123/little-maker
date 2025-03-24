@@ -4,6 +4,13 @@ from flask import Flask, jsonify, request
 import duckdb
 import os
 import pandas as pd
+from apify_client import ApifyClient
+from dotenv import load_dotenv
+import json
+
+load_dotenv()
+api_key = os.getenv('INSTRUCTABLES_KEY')
+api_client = ApifyClient(api_key)
 
 app = Flask(__name__)
 data_dir = "data" # data directory
@@ -95,6 +102,46 @@ def tools():
 
     return jsonify(tools_data)
 
+@app.route("/generate")
+def generate_ideas():
+    # sample results
+    with open(os.path.join(data_dir, 'dummy_api.json'), 'r') as file:
+        results = json.load(file)
+
+    ideas = []
+    i = 1
+    for result in results:
+        ideas.append(
+            {
+                'id': i,
+                'title': result.get('title'),
+                'image': result.get('steps')[0].get('media')[0].get('src'),
+                'description': result.get('steps')[0].get('body'),
+                'url': result.get('url')
+            }
+        )
+        i+=1
+
+    # search_terms = request.args.get("search_terms")
+    # # Prepare the Actor input
+    # run_input = {
+    #     "search": search_terms,
+    #     "maxItems": 5,
+    #     "extendOutputFunction": "($) => { return {} }",
+    #     "customMapFunction": "(object) => { return {...object} }",
+    #     "proxy": { "useApifyProxy": True },
+    # }
+
+    # # Run the Actor and wait for it to finish
+    # run = api_client.actor("epctex/instructables-scraper").call(run_input=run_input)
+
+    # # Fetch and print Actor results from the run's dataset (if there are any)
+    # print("💾 Check your data here: https://console.apify.com/storage/datasets/" + run["defaultDatasetId"])
+    # for item in api_client.dataset(run["defaultDatasetId"]).iterate_items():
+    #     print(item)
+    #     # need to format response before returning
+
+    return jsonify(ideas)
 
 def create_materials_database(materials_db):
     # connect to db

@@ -40,13 +40,6 @@
     background-color: #f9f9f9;
   }
   
-  /* Encyclopedia box at the bottom */
-  .encyclopedia {
-    background-color: #e9ecef;  /* Bootstrap light grey */
-    border-radius: 0.25rem;
-    text-align: center;
-  }
-  
   .Tools, .Materials {
     padding-bottom: 1rem;
     border-bottom: 1px solid #ddd;
@@ -227,3 +220,78 @@
     font-size: 32px;
     font-weight: 200;
  }
+
+ .encyclopedia-container {
+  max-height: 80px;
+  overflow: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-right: 20px;
+ }
+
+ .encyclopedia-entry {
+  max-width: 10rem;
+  max-height: 10rem;
+  border-radius: 5px;
+ }
+
+ .encyclopedia-image {
+  width: 100%;  /* Ensures full width */
+  height: 50%;  /* Takes up half of the card */
+  object-fit: cover; /* Ensures the image fills the space without distortion */
+  border-radius: 0.5rem;
+}
+
+.encyclopedia-entry-title {
+  font-size: 14px;
+  text-align: center;
+  padding-top: 5px;
+}
+
+ .idea-card {
+  background: white;
+  height: 32rem;
+  width: 24rem;
+  border-radius: 0.5rem;
+  overflow: hidden; /* Prevents content overflow */
+  border: #ccc solid 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.idea-card:hover {
+  cursor: grab;
+}
+
+.idea-card:active {
+  cursor: grabbing;
+}
+
+.card-image {
+  width: 100%;  /* Ensures full width */
+  height: 50%;  /* Takes up half of the card */
+  object-fit: cover; /* Ensures the image fills the space without distortion */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 50%; /* The other half of the card */
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.card-description {
+  font-size: 1rem;
+  flex-grow: 1;
+  overflow: auto;
+}
