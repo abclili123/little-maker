@@ -72,21 +72,28 @@ function Materials() {
   // but we can skip that for this week probably
   return (
     <div>
-      <h1 class="header">Materials</h1>
+      <h1 class="header light-head">Materials</h1>
+
+      <div class="row materials-bar">
+        <div class="col-5">
+          <div className="materials-search-add" id="filter-by-tag">
+            <input type="text" placeholder="Filter by Tag" />
+            <span>{'\u00D7'}</span>
+          </div>
+        </div>
+        <div class="col-7">
+          <div className="materials-search-add" id="search-materials">
+            <input type="text" placeholder="Search or Add Materials" />
+            <span>{'\u00D7'}</span>
+          </div>
+        </div>
+      </div>
 
       <div class="materials-container">
         <ul>
           {data.map((material, i) => (
-            <li key={i} className="draggable" 
-              style={{ 
-                  cursor: 'grab', 
-                  display: 'inline-block', 
-                  padding: '10px', 
-                  margin: '5px', 
-                  background: 'white', 
-                  borderRadius: '3px', 
-                  border: 'solid #ccc 1px'
-              }}>
+            <li key={i} className="draggable" class="material-block">
+
               {material.emoji} {material.name}
               </li>
           ))}
