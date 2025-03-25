@@ -69,6 +69,16 @@
     align-content: center;
     text-align: center;
   }
+
+  .dropped-item {
+    padding: 8px;
+    margin: 5px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+  }
+  
   
   .table-grid {
     position: relative;

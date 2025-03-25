@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import interact from 'interactjs';
 
+function dragMoveListener(event) {
+  const target = event.target;
+  const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+  const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+  target.style.transform = `translate(${x}px, ${y}px)`;
+  target.setAttribute('data-x', x);
+  target.setAttribute('data-y', y);
+}
+
 function Materials() {
   // State variables to store fetched materials, loading state, and errors
   const [data, setData] = useState([]);
@@ -33,15 +43,15 @@ function Materials() {
     interact('.draggable').draggable({
       inertia: true, // smooth dragging
       modifiers: [
-        interact.modifiers.restrictRect({
-          restriction: 'parent', //keep items inside parent containers
-          endOnly: true
-        })
+        //interact.modifiers.restrictRect({
+          //restriction: 'parent', //keep items inside parent containers
+          //endOnly: true
+        //})
       ],
       autoScroll: true, // auto-scroll when dragging near edgess
-      listeners: {
+      listeners: { move: dragMoveListener
         //function that moved the dragged element
-        move(event) {
+        /* move(event) {
           const target = event.target;
           let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
           let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
@@ -52,7 +62,7 @@ function Materials() {
           //store new positions in attributes for tracking
           target.setAttribute('data-x', x);
           target.setAttribute('data-y', y);
-        }
+        } */
       }
     });
   }, [data]); //Re-run drag setup when new materials are fetched
@@ -72,28 +82,23 @@ function Materials() {
   // but we can skip that for this week probably
   return (
     <div>
-      <h1 class="header">Materials</h1>
-
-      <div class="materials-container">
-        <ul>
-          {data.map((material, i) => (
-            <li key={i} className="draggable" 
-              style={{ 
-                  cursor: 'grab', 
-                  display: 'inline-block', 
-                  padding: '10px', 
-                  margin: '5px', 
-                  background: 'white', 
-                  borderRadius: '3px', 
-                  border: 'solid #ccc 1px'
-              }}>
-              {material.emoji} {material.name}
-              </li>
-          ))}
-        </ul>
-      </div>
+      <h1 className="header">Materials</h1>
+      <ul>
+        {data.map((material, i) => (
+          <li
+            key={i}
+            className="draggable"
+            data-name={material.name}
+            data-src={material.image}
+            style={{ cursor: 'grab', marginBottom: '8px' }}
+          >
+            {material.emoji} {material.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
+  
 }
 
 export default Materials;

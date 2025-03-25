@@ -2,6 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Ideas from './Ideas.js'; // ideas is a child component of table
 import interact from 'interactjs';
 
+
+function dragMoveListener(event) {
+  const target = event.target;
+  const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+  const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+  target.style.transform = `translate(${x}px, ${y}px)`;
+  target.setAttribute('data-x', x);
+  target.setAttribute('data-y', y);
+}
+
+
 const Table = ( {addToEncyclopedia}) => {
     //tracks materials dropped onto table
     const [droppedMaterials, setDroppedMaterials] = useState([]);
@@ -16,11 +28,22 @@ const Table = ( {addToEncyclopedia}) => {
             
             // event triggered with dragged itemis dropped
             ondrop(event) {
-                const materialName = event.relatedTarget.getAttribute('data-name');
-                setDroppedMaterials((prev) => [...prev, materialName]); 
+                const name = event.relatedTarget.getAttribute('data-name');
+                const src = event.relatedTarget.getAttribute('src');
+                
+                //const materialName = event.relatedTarget.getAttribute('data-name');
+                setDroppedMaterials((prev) => [...prev, { name, src } /* materialName */]); 
             }
         });
     }, []); // runs once when component mounts
+
+    useEffect(() => {
+      interact('.dropped-item').draggable({
+        inertia: true,
+        autoScroll: true,
+        listeners: { move: dragMoveListener }
+      });
+    }, [droppedMaterials]); // Re-run when new items are dropped
 
     // Function to handle "Make it!" button click
     const handleMakeIt = () => {
@@ -61,7 +84,17 @@ const Table = ( {addToEncyclopedia}) => {
         >
           <div
             class="dropzone table-grid"
-          >
+          > 
+            {droppedMaterials.map((item, i) => (
+              <img 
+                key={i} 
+                src={item.src}
+                alt={item.name}
+                className="dropped-item"
+              />
+                
+            ))}
+
 
           </div>
           <button onClick={handleMakeIt} class="make-button">
