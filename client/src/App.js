@@ -21,7 +21,7 @@ function App() {
     setEncyclopediaIdeas((prev) => [...prev, idea]);
   };
 
-  const checkOverlap = () => {
+  const checkOverlap = (check=null) => {
     console.log('Checking overlap...');
     console.log(playAreaItems)
     
@@ -33,24 +33,53 @@ function App() {
       console.warn("No dropzone found!");
       return [];
     }
-    
-    const overlappingItems = [];
-    
+
     // Get dropzone dimensions
     const zoneRect = dropZone.getBoundingClientRect();
     console.log("Dropzone Rect:", zoneRect);
-  
-    playAreaItems.forEach((item) => {
-      console.log(`Checking element with ID: ${item.id}`);
-      const itemElement = document.getElementById(`${item.id}`);
-  
+    
+    if (!check) {
+      const overlappingItems = [];
+      
+      playAreaItems.forEach((item) => {
+        console.log(`Checking element with ID: ${item.id}`);
+        const itemElement = document.getElementById(`${item.id}`);
+    
+        if (!itemElement) {
+          console.warn(`Element not found: ${item.id}`);
+          return;
+        }
+    
+        const itemRect = itemElement.getBoundingClientRect();
+        console.log(`Item Rect for ${item.name}:`, itemRect);
+    
+        // Check for overlap with the single dropzone
+        const isOverlapping =
+          itemRect.left < zoneRect.right &&
+          itemRect.right > zoneRect.left &&
+          itemRect.top < zoneRect.bottom &&
+          itemRect.bottom > zoneRect.top;
+    
+        if (isOverlapping) {
+          overlappingItems.push(item);
+          console.log(`✅ ${item.name} is overlapping with the dropzone`);
+        }
+      });
+    
+      console.log("Final overlapping items:", overlappingItems);
+      return overlappingItems;
+    }
+    else {
+      console.log(`Checking element with ID: ${check}`);
+      const itemElement = document.getElementById(`${check}`);
+
       if (!itemElement) {
-        console.warn(`Element not found: ${item.id}`);
+        console.warn(`Element not found: ${check}`);
         return;
       }
   
       const itemRect = itemElement.getBoundingClientRect();
-      console.log(`Item Rect for ${item.name}:`, itemRect);
+      console.log(`Item Rect for ${check}:`, itemRect);
   
       // Check for overlap with the single dropzone
       const isOverlapping =
@@ -60,13 +89,12 @@ function App() {
         itemRect.bottom > zoneRect.top;
   
       if (isOverlapping) {
-        overlappingItems.push(item);
-        console.log(`✅ ${item.name} is overlapping with the dropzone`);
+        itemElement.style.background = "linear-gradient(to top, lightgreen, white)"; // need to change to nicer color
       }
-    });
-  
-    console.log("Final overlapping items:", overlappingItems);
-    return overlappingItems;
+      else {
+        itemElement.style.background = "white";
+      }
+    }
   }; 
 
   const handleMaterialClick = (material) => {
@@ -81,12 +109,21 @@ function App() {
     // Add random offset (-50 to +50 pixels)
     const randomOffset = () => Math.random() * 300 - 300;
     
-    setPlayAreaItems(prev => [...prev, {
+    const newMaterial = {
       ...material,
       id: 'material-' + Date.now(),
-      x: centerX + randomOffset(), // Center + random offset
-      y: centerY + randomOffset()  // Center + random offset
-    }]);
+      x: centerX + randomOffset(),
+      y: centerY + randomOffset()
+    };
+
+    setPlayAreaItems(prev => {
+      const updatedItems = [...prev, newMaterial];
+      
+      // Run checkOverlap with the new material's ID after the state updates
+      setTimeout(() => checkOverlap(newMaterial.id), 0);
+
+      return updatedItems;
+    });
   };
 
   const handleToolClick = (tool) => {
@@ -101,12 +138,21 @@ function App() {
     // Add random offset (-50 to +50 pixels)
     const randomOffset = () => Math.random() * 300 - 300;
     
-    setPlayAreaItems(prev => [...prev, {
+    const newTool = {
       ...tool,
       id: 'tool-' + Date.now(),
-      x: centerX + randomOffset(), // Center + random offset
-      y: centerY + randomOffset()  // Center + random offset
-    }]);
+      x: centerX + randomOffset(),
+      y: centerY + randomOffset()
+    };
+
+    setPlayAreaItems(prev => {
+      const updatedItems = [...prev, newTool];
+      
+      // Run checkOverlap with the new tool's ID after the state updates
+      setTimeout(() => checkOverlap(newTool.id), 0);
+
+      return updatedItems;
+    });
   };
 
   return (
@@ -130,6 +176,7 @@ function App() {
                 id={item.id}
                 emoji={item.emoji}
                 name={item.name}
+                onDragEnd = {() => checkOverlap(item.id)}
                 style={{
                   position: 'absolute',
                   left: item.x,
@@ -142,10 +189,11 @@ function App() {
             ) : item.id.startsWith("tool") ? (
               <Tool
                 key={item.id}
-                id={item.id}
+                id={item.id} // this one
                 img={item.img}
                 name={item.name}
                 classes={'text-center'}
+                onDragEnd = {() => checkOverlap(item.id)}
                 style={{
                   position: 'absolute',
                   left: item.x,

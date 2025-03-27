@@ -65,7 +65,7 @@ function Tools( {onToolClick} ) {
   );
 }
 
-const Tool = ({ id, i, img, name, onClick, classes, style = {}, inPlayArea = false, drag = false }) => {
+const Tool = ({ id, i, img, name, onClick, classes, onDragEnd = null, style = {}, inPlayArea = false, drag = false }) => {
   const Component = drag ? motion.div : 'div';
   return (
       <Component 
@@ -74,6 +74,7 @@ const Tool = ({ id, i, img, name, onClick, classes, style = {}, inPlayArea = fal
       drag={drag}
       dragMomentum={false} 
       whileDrag={{ scale: 1.2 }}
+      onDragEnd={onDragEnd}
       style={{ 
         cursor: inPlayArea ? 'grab' : 'copy', ...style
       }} className={classes} key={i}> 

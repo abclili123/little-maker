@@ -54,7 +54,7 @@ function Materials({ onMaterialClick }) {
   );
 }
 
-const Material = ({ id, emoji, name, onClick, style = {}, inPlayArea = false, drag = false }) => {
+const Material = ({ id, emoji, name, onClick, onDragEnd = null, style = {}, inPlayArea = false, drag = false }) => {
   const Component = drag ? motion.div : 'div';
   
   return (
@@ -64,6 +64,7 @@ const Material = ({ id, emoji, name, onClick, style = {}, inPlayArea = false, dr
       drag={drag}
       dragMomentum={false} 
       whileDrag={{ scale: 1.2 }}
+      onDragEnd={onDragEnd}
       style={{ 
         cursor: inPlayArea ? 'grab' : 'copy', 
         display: 'inline-block', 
