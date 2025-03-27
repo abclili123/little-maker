@@ -97,13 +97,21 @@ def tools():
     results = conn.execute(query).fetchall()
 
     tools_data = [
-        {"tool name": row[0], "link": row[1] or "", "description": row[2], "img": "assets/tool_images/" + row[0].lower().replace(" ", "_") + ".png"} for row in results
+        {"name": row[0], "link": row[1] or "", "description": row[2], "img": "assets/tool_images/" + row[0].lower().replace(" ", "_") + ".png"} for row in results
     ]
 
     return jsonify(tools_data)
 
-@app.route("/generate")
+@app.route("/generate", methods=["POST"])
 def generate_ideas():
+    data = request.get_json()
+    
+    if not data or 'items' not in data:
+        return jsonify({"error": "No items provided"}), 400
+    
+    items = data['items']
+    print(f"Received items: {items}")
+    
     # sample results
     with open(os.path.join(data_dir, 'dummy_api.json'), 'r') as file:
         results = json.load(file)

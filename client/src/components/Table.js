@@ -1,64 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Ideas from './Ideas.js'; // ideas is a child component of table
-import interact from 'interactjs';
 
-const Table = ( {addToEncyclopedia}) => {
+const Table = ( {addToEncyclopedia, checkOverlap, setPlayAreaItems}) => {
     //tracks materials dropped onto table
-    const [droppedMaterials, setDroppedMaterials] = useState([]);
     const [showIdeas, setShowIdeas] = useState(false); // for showing and hiding generated ideas
     const [ideas, setIdeas] = useState([]); // table will hold ideas since it is the parent component and ideas will be passed as prop
 
-    useEffect(() => {
-        //initialize Interact.js dropzone
-        interact('.dropzone').dropzone({
-            accept: '.draggable', //accepts only elements with class "draggable"
-            overlap: 0.75, // requires only 57% overlap for a drop
-            
-            // event triggered with dragged itemis dropped
-            ondrop(event) {
-                const materialName = event.relatedTarget.getAttribute('data-name');
-                setDroppedMaterials((prev) => [...prev, materialName]); 
-            }
-        });
-    }, []); // runs once when component mounts
-
     // Function to handle "Make it!" button click
     const handleMakeIt = () => {
-      console.log('Materials on the table:', droppedMaterials);
-      // TODO: Later, send these materials to the Instructables API
-      // right now just fetches dummy data
-      fetch('/generate')
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // when api returns, set show ideas to true to show the ideas
-          // this causes re rendering of component to show the ideas
-          setIdeas(data);
-          setShowIdeas(true)
-        })
-    };
-
-    const handleDrop = (e) => {
-      e.preventDefault();
-      const toolData = e.dataTransfer.getData("tool");
-      const tool = JSON.parse(toolData);
-      console.log("Dropped Tool:", tool);
-      // You can now render it on the table or update state
+      let items = checkOverlap();
+      console.log('Materials on the table:', items);
+    
+      // reset the items before generating ideas
+      setPlayAreaItems([]);
+    
+      // Send the items array to the server
+      fetch('/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items: items }) // Send the items as part of the request body
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // When API returns, process the data and update the component
+        console.log(data);
+        setIdeas(data); // Assuming you have a state to hold the ideas
+        setShowIdeas(true); // Show the ideas
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
     };
     
 
-    //havent done more error checks
-
     return (
       <div class="left-content">
-        <div class="workspace"
-         onDragOver={(e) => e.preventDefault()}
-         onDrop={handleDrop}
-        >
+        <div class="workspace">
           <div
             class="dropzone table-grid"
           >
