@@ -10,26 +10,35 @@ const Table = ( {addToEncyclopedia, checkOverlap, setPlayAreaItems}) => {
     const handleMakeIt = () => {
       let items = checkOverlap();
       console.log('Materials on the table:', items);
-
+    
       // reset the items before generating ideas
       setPlayAreaItems([]);
-
-      // TODO: Later, send these materials to the Instructables API
-      // right now just fetches dummy data
-      // fetch('/generate')
-      //   .then((response) => {
-      //     if (!response.ok) {
-      //       throw new Error('Network response was not ok');
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data) => {
-      //     // when api returns, set show ideas to true to show the ideas
-      //     // this causes re rendering of component to show the ideas
-      //     setIdeas(data);
-      //     setShowIdeas(true)
-      //   })
+    
+      // Send the items array to the server
+      fetch('/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items: items }) // Send the items as part of the request body
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // When API returns, process the data and update the component
+        console.log(data);
+        setIdeas(data); // Assuming you have a state to hold the ideas
+        setShowIdeas(true); // Show the ideas
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
     };
+    
 
     return (
       <div class="left-content">
