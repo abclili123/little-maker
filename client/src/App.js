@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Materials, Material } from "./components/Materials.js";
-import Tools from "./components/Tools.js";
+import { Tools, Tool } from "./components/Tools.js";
 import Encyclopedia from "./components/Encyclopedia.js";
 import Table from "./components/Table.js";
 import React, { useState, useEffect, useRef } from "react";
@@ -89,6 +89,26 @@ function App() {
     }]);
   };
 
+  const handleToolClick = (tool) => {
+    // Get the play area position and dimensions
+    const playArea = document.getElementById('play-area');
+    const rect = playArea.getBoundingClientRect();
+    
+    // Calculate center position
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // Add random offset (-50 to +50 pixels)
+    const randomOffset = () => Math.random() * 300 - 300;
+    
+    setPlayAreaItems(prev => [...prev, {
+      ...tool,
+      id: 'tool-' + Date.now(),
+      x: centerX + randomOffset(), // Center + random offset
+      y: centerY + randomOffset()  // Center + random offset
+    }]);
+  };
+
   return (
     <div className="App container-fluid">
       <div className="row flex-grow-1" style={{ minHeight: '90vh' }}>
@@ -103,22 +123,45 @@ function App() {
             </div>
           </div>
 
-          {/* Render the copied materials */}
           {playAreaItems.map((item) => (
-            <Material
-              key={item.id}
-              id={item.id}
-              emoji={item.emoji}
-              name={item.name}
-              style={{
-                position: 'absolute',
-                left: item.x,
-                top: item.y,
-                zIndex: 10
-              }}
-              inPlayArea={true}
-              drag={true}
-            />
+            item.id.startsWith("material") ? (
+              <Material
+                key={item.id}
+                id={item.id}
+                emoji={item.emoji}
+                name={item.name}
+                style={{
+                  position: 'absolute',
+                  left: item.x,
+                  top: item.y,
+                  zIndex: 10
+                }}
+                inPlayArea={true}
+                drag={true}
+              />
+            ) : item.id.startsWith("tool") ? (
+              <Tool
+                key={item.id}
+                id={item.id}
+                img={item.img}
+                name={item.name}
+                classes={'text-center'}
+                style={{
+                  position: 'absolute',
+                  left: item.x,
+                  top: item.y,
+                  zIndex: 10, 
+                  background: 'white', 
+                  borderRadius: '3px', 
+                  border: 'solid #ccc 1px',
+                  padding: '8px',
+                  paddingBottom: '0px',
+                  marginBottom: '0px'
+                }}
+                inPlayArea={true}
+                drag={true}
+              />
+            ) : null // In case id doesn't match any known type
           ))}
 
           <Table addToEncyclopedia={addToEncyclopedia} checkOverlap={checkOverlap}/>
@@ -127,7 +170,7 @@ function App() {
         {/* Right Column - Sidebar */}
         <div className="col-md-5 p-3 d-flex flex-column">
           <div className="row tool-section border-bottom">
-            <Tools />
+            <Tools onToolClick={handleToolClick} />
           </div>
           <div className="row border-bottom">
             <Materials onMaterialClick={handleMaterialClick} />

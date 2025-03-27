@@ -1,8 +1,7 @@
-// follow Materials.js example
 import React, { useState, useEffect } from 'react';
-import interact from 'interactjs';
+import { motion } from "framer-motion";
 
-function Tools() {
+function Tools( {onToolClick} ) {
   // State variables to store fetched tools, loading state, and errors
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true); //track loading
@@ -36,10 +35,6 @@ function Tools() {
     return <div>Error: {error.message}</div>;
   }
 
-  const handleDragStart = (e, tool) => {
-    e.dataTransfer.setData("tool", JSON.stringify(tool));
-  };  
-
   // show all tools
   return (
     <div>
@@ -54,24 +49,14 @@ function Tools() {
         <div>
           <div className="row">
             {data.map((tool, i) => (
-              <div className="col-4 mb-3 text-center tool-box" 
-                   key={i}
-                   draggable
-                   onDragStart={(e) => handleDragStart(e, tool)}
-                   >
-                
-                <div class="tool-img-container">
-                  <img 
-                    src={process.env.PUBLIC_URL + tool.img} 
-                    alt={tool["tool name"]} 
-                    width="100" 
-                    class="img-contain"
-                  />
-                </div>
-
-                <p class="tool-label">{tool["tool name"]}</p>
-
-              </div>
+              <Tool 
+                key={i}
+                id={i}
+                img={tool.img}
+                name={tool.name}
+                onClick={() => onToolClick(tool)}
+                classes = "col-4 mb-3 text-center tool-box"
+              />
             ))}
           </div>
         </div>
@@ -80,4 +65,29 @@ function Tools() {
   );
 }
 
-export default Tools;
+const Tool = ({ id, i, img, name, onClick, classes, style = {}, inPlayArea = false, drag = false }) => {
+  const Component = drag ? motion.div : 'div';
+  return (
+      <Component 
+      id={id}
+      onClick={onClick}
+      drag={drag}
+      dragMomentum={false} 
+      whileDrag={{ scale: 1.2 }}
+      style={{ 
+        cursor: inPlayArea ? 'grab' : 'copy', ...style
+      }} className={classes} key={i}> 
+        <div class="tool-img-container">
+          <img 
+            src={process.env.PUBLIC_URL + img} 
+            alt={name} 
+            width="100" 
+            class="img-contain"
+          />
+        </div>
+        <p class="tool-label">{name}</p>
+    </Component>
+  );
+};
+
+export { Tools, Tool };
