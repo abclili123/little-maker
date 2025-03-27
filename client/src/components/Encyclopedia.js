@@ -1,7 +1,7 @@
 const Encyclopedia = ( {ideas} ) => {
   return (
     <div width={'100%'}>
-      <h1 className="header">Encyclopedia</h1>
+      <h1 className="header light-head">Encyclopedia</h1>
       <div className="encyclopedia-container">
       {ideas.map((idea) => (
         <Idea 
