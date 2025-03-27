@@ -212,7 +212,7 @@ function App() {
             ) : null // In case id doesn't match any known type
           ))}
 
-          <Table addToEncyclopedia={addToEncyclopedia} checkOverlap={checkOverlap}/>
+          <Table addToEncyclopedia={addToEncyclopedia} checkOverlap={checkOverlap} setPlayAreaItems={setPlayAreaItems}/>
         </div>
 
         {/* Right Column - Sidebar */}

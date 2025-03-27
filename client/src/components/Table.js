@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Ideas from './Ideas.js'; // ideas is a child component of table
 
-const Table = ( {addToEncyclopedia, checkOverlap}) => {
+const Table = ( {addToEncyclopedia, checkOverlap, setPlayAreaItems}) => {
     //tracks materials dropped onto table
     const [showIdeas, setShowIdeas] = useState(false); // for showing and hiding generated ideas
     const [ideas, setIdeas] = useState([]); // table will hold ideas since it is the parent component and ideas will be passed as prop
@@ -10,6 +10,10 @@ const Table = ( {addToEncyclopedia, checkOverlap}) => {
     const handleMakeIt = () => {
       let items = checkOverlap();
       console.log('Materials on the table:', items);
+
+      // reset the items before generating ideas
+      setPlayAreaItems([]);
+
       // TODO: Later, send these materials to the Instructables API
       // right now just fetches dummy data
       // fetch('/generate')
