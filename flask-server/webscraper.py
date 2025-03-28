@@ -50,10 +50,14 @@ def instructables_call(search_query, max_results=2):
             project_page_source = driver.page_source
             project_soup = BeautifulSoup(project_page_source, "html.parser")
 
-            # Extract the description text from the individual project page
-            description_section = project_soup.find("section", {"id": "intro"})
-            description_text = description_section.get_text(strip=True) if description_section else "No description available"
-            
+            # Extract the description text from the step-body inside the intro section
+            intro_section = project_soup.find("section", {"id": "intro"})
+            if intro_section:
+                step_body = intro_section.find("div", class_="step-body")
+                description_text = step_body.get_text(strip=True) if step_body else "No description available"
+            else:
+                description_text = "No description available"
+
             results.append(
                 {
                     'title': title,
