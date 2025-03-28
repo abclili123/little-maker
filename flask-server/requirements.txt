@@ -5,3 +5,4 @@ pandas
 openai
 requests
 beautifulsoup4
+selenium

@@ -4,15 +4,13 @@ from flask import Flask, jsonify, request
 import duckdb
 import os
 import pandas as pd
-from apify_client import ApifyClient
 from dotenv import load_dotenv
 import json
 from openai import OpenAI
 import re
+from webscraper import instructables_call
 
 load_dotenv()
-api_key = os.getenv('INSTRUCTABLES_KEY')
-api_client = ApifyClient(api_key)
 OpenAI.api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI()
 
@@ -124,7 +122,7 @@ def gpt_call(items):
         "content": [
             {
             "type": "input_text",
-            "text": f"Using the following tools and and materials, brainstorm 5 project ideas. {items}"
+            "text": f"Using the following tools and and materials, brainstorm 3 project ideas. {items}"
             }
         ]
         },
@@ -184,24 +182,15 @@ def generate_ideas():
         return False
     
     instructable_results = []
+    id = 1
     for project_idea in project_ideas:
-        run_input = {
-            "search": project_idea,
-            "maxItems": 2,
-            "extendOutputFunction": "($) => { return {} }",
-            "customMapFunction": "(object) => { return {...object} }",
-            "proxy": { "useApifyProxy": True },
-        }
-
-        # Run the Actor and wait for it to finish
-        run = api_client.actor("epctex/instructables-scraper").call(run_input=run_input)
-
-        # Fetch and print Actor results from the run's dataset (if there are any)
-        print("💾 Check your data here: https://console.apify.com/storage/datasets/" + run["defaultDatasetId"])
-        for item in api_client.dataset(run["defaultDatasetId"]).iterate_items():
-            print(item)
-            # need to format response before returning
-
+        results = instructables_call(project_idea)
+        for r in results: # add id to each result
+            r['id'] = id
+            id+=1
+            instructable_results.append(r)
+    
+    print(instructable_results)
     return jsonify(instructable_results)
 
 def create_materials_database(materials_db):

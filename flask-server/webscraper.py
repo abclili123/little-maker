@@ -1,14 +1,23 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 from time import sleep
 
-def instructables_call(search_query, max_results=2):
-    url = f"https://www.instructables.com/search/?q={search_query}"
+def get_driver():
+    # Set up headless options for Chrome
+    options = Options()
+    options.add_argument("--headless")  # This will prevent the browser window from opening
+    options.add_argument("--disable-gpu")  # Disable GPU acceleration for headless mode (optional)
+    options.add_argument("--no-sandbox")  # Disable sandboxing (optional, for compatibility)
 
-    # Set up Selenium WebDriver (Ensure ChromeDriver is installed and its path is correct)
-    options = webdriver.ChromeOptions()
-    options.headless = True  # Runs the browser in the background (headless mode)
+    # You can specify the path to your ChromeDriver here, if needed
     driver = webdriver.Chrome(options=options)
+
+    return driver
+
+def instructables_call(search_query, max_results=2):
+    driver = get_driver()
+    url = f"https://www.instructables.com/search/?q={search_query}"
 
     driver.get(url)
     sleep(3)  # Let the page load for 3 seconds (you can adjust this)
@@ -48,8 +57,8 @@ def instructables_call(search_query, max_results=2):
             results.append(
                 {
                     'title': title,
-                    'img': image_url,
-                    'project_link': link,
+                    'image': image_url,
+                    'url': link,
                     'description': description_text
                 }
             )
