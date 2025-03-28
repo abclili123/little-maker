@@ -1,6 +1,7 @@
 python-dotenv
-apify-client
 flask
 duckdb
 pandas
 openai
+requests
+beautifulsoup4
