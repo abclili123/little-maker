@@ -106,38 +106,38 @@ def tools():
 
 def gpt_call(items):
     response = client.responses.create(
-    model="gpt-3.5-turbo",
-    input=[
-        {
-        "role": "system",
-        "content": [
+        model="gpt-3.5-turbo",
+        input=[
             {
-            "type": "input_text",
-            "text": "You are brainstorming project ideas for a beginner maker to make in a makerspace. The project ideas you come up with will be searched on Instructables for tutorials. You will be given a list of tools and materials and you will return a list of project ideas. Only return the project ideas titles as a comma separated list. Do not include any other information. For example, given ['LED', 'Arduino'] return: Touch Control LED, Interactive LED Wearable, Arduino LED Music Visualizer"
-            }
-        ]
-        },
-        {
-        "role": "user",
-        "content": [
+            "role": "system",
+            "content": [
+                {
+                "type": "input_text",
+                "text": "You are brainstorming project ideas for a beginner maker to make in a makerspace. The project ideas you come up with will be searched on Instructables for tutorials. You will be given a list of tools and materials and you will return a list of project ideas. Only return the project ideas titles as a comma separated list. Do not include any other information. For example, given ['LED', 'Arduino'] return: Touch Control LED, Interactive LED Wearable, Arduino LED Music Visualizer"
+                }
+            ]
+            },
             {
-            "type": "input_text",
-            "text": f"Using the following tools and and materials, brainstorm 3 project ideas. {items}"
+            "role": "user",
+            "content": [
+                {
+                "type": "input_text",
+                "text": f"Using the following tools and and materials, brainstorm 3 project ideas. {items}"
+                }
+            ]
+            },
+        ],
+        text={
+            "format": {
+            "type": "text"
             }
-        ]
         },
-    ],
-    text={
-        "format": {
-        "type": "text"
-        }
-    },
-    reasoning={},
-    tools=[],
-    temperature=1,
-    max_output_tokens=2048,
-    top_p=1,
-    store=True
+        reasoning={},
+        tools=[],
+        temperature=1,
+        max_output_tokens=2048,
+        top_p=1,
+        store=True
     )
 
     if response.output and len(response.output) > 0:
