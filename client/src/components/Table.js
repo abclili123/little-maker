@@ -2,25 +2,23 @@ import React, { useState } from 'react';
 import Ideas from './Ideas.js'; // ideas is a child component of table
 
 const Table = ( {addToEncyclopedia, checkOverlap, setPlayAreaItems}) => {
-    //tracks materials dropped onto table
-    const [showIdeas, setShowIdeas] = useState(false); // for showing and hiding generated ideas
-    const [ideas, setIdeas] = useState([]); // table will hold ideas since it is the parent component and ideas will be passed as prop
+    const [showIdeas, setShowIdeas] = useState(false);
+    const [ideas, setIdeas] = useState([]);
+    const [loading, setLoading] = useState(false); // Track loading state
 
-    // Function to handle "Make it!" button click
     const handleMakeIt = () => {
       let items = checkOverlap();
       console.log('Materials on the table:', items);
     
-      // reset the items before generating ideas
       setPlayAreaItems([]);
-    
-      // Send the items array to the server
+      setLoading(true); // Set loading state to true
+
       fetch('/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ items: items }) // Send the items as part of the request body
+        body: JSON.stringify({ items: items })
       })
       .then((response) => {
         if (!response.ok) {
@@ -29,31 +27,39 @@ const Table = ( {addToEncyclopedia, checkOverlap, setPlayAreaItems}) => {
         return response.json();
       })
       .then((data) => {
-        // When API returns, process the data and update the component
-        console.log(data);
-        setIdeas(data); // Assuming you have a state to hold the ideas
-        setShowIdeas(true); // Show the ideas
+        setIdeas(data); // Update the ideas
+        setShowIdeas(true); // Show ideas
+        setLoading(false); // Set loading state to false
       })
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
+        setLoading(false); // Set loading state to false in case of an error
       });
     };
-    
 
     return (
-      <div class="left-content">
-        <div class="workspace">
-          <div
-            class="dropzone table-grid"
-          >
-
-          </div>
-          <button onClick={handleMakeIt} class="make-button">
+      <div className="left-content">
+        <div className="workspace">
+          <div className="dropzone table-grid"></div>
+          <button onClick={handleMakeIt} className="make-button">
             Make It!
           </button>
         </div>
 
-        {/* only show ideas when true */}
+        {/* Show loading card while data is being fetched */}
+        {loading && (
+          <div className="d-flex justify-content-center align-items-center position-absolute w-100 h-100" style={{ top: 0, left: 0 }}>
+              <div className="card" style={{ width: '18rem' }}>
+                  <div className="card-body text-center">
+                      <div className="spinner-border text-primary" role="status">
+                      </div>
+                      <p className="mt-3">Generating ideas...</p>
+                  </div>
+              </div>
+          </div>
+        )}
+
+        {/* Only show ideas when they are available */}
         {showIdeas && <Ideas ideas={ideas} setIdeas={setIdeas} addToEncyclopedia={addToEncyclopedia} onClose={() => setShowIdeas(false)} />} 
       </div>
     );
