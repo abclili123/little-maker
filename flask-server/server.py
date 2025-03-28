@@ -7,10 +7,14 @@ import pandas as pd
 from apify_client import ApifyClient
 from dotenv import load_dotenv
 import json
+from openai import OpenAI
+import re
 
 load_dotenv()
 api_key = os.getenv('INSTRUCTABLES_KEY')
 api_client = ApifyClient(api_key)
+OpenAI.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI()
 
 app = Flask(__name__)
 data_dir = "data" # data directory
@@ -102,6 +106,69 @@ def tools():
 
     return jsonify(tools_data)
 
+def gpt_call(items):
+    response = client.responses.create(
+    model="gpt-3.5-turbo",
+    input=[
+        {
+        "role": "system",
+        "content": [
+            {
+            "type": "input_text",
+            "text": "You are brainstorming project ideas for a beginner maker to make in a makerspace. The project ideas you come up with will be searched on Instructables for tutorials. You will be given a list of tools and materials and you will return a list of project ideas. Only return the project ideas titles as a comma separated list. Do not include any other information. For example, given ['LED', 'Arduino'] return: Touch Control LED, Interactive LED Wearable, Arduino LED Music Visualizer"
+            }
+        ]
+        },
+        {
+        "role": "user",
+        "content": [
+            {
+            "type": "input_text",
+            "text": f"Using the following tools and and materials, brainstorm 5 project ideas. {items}"
+            }
+        ]
+        },
+    ],
+    text={
+        "format": {
+        "type": "text"
+        }
+    },
+    reasoning={},
+    tools=[],
+    temperature=1,
+    max_output_tokens=2048,
+    top_p=1,
+    store=True
+    )
+
+    if response.output and len(response.output) > 0:
+        first_output = response.output[0]
+        if first_output.content and len(first_output.content) > 0:
+            response_text = first_output.content[0].text  
+        else:
+            response_text = False
+    else:
+        response_text = False
+
+    return response_text
+
+def validate_response(response_text):
+    pattern = r'^(\w[\w\s-]*)(,\s*\w[\w\s-]*)*$'
+    return bool(re.match(pattern, response_text))
+
+def get_valid_project_ideas(names, max_attempts=3):
+    attempts = 0
+    while attempts <= max_attempts:
+        project_ideas = gpt_call(names)
+        
+        if validate_response(project_ideas):
+            return project_ideas.split(", ") 
+        
+        attempts += 1
+
+    return None
+
 @app.route("/generate", methods=["POST"])
 def generate_ideas():
     data = request.get_json()
@@ -109,47 +176,33 @@ def generate_ideas():
     if not data or 'items' not in data:
         return jsonify({"error": "No items provided"}), 400
     
-    items = data['items']
-    print(f"Received items: {items}")
+    names = [item["name"] for item in data['items']]
+    project_ideas = get_valid_project_ideas(names)
+
+    if not project_ideas:
+        # need to return with error
+        return False
     
-    # sample results
-    with open(os.path.join(data_dir, 'dummy_api.json'), 'r') as file:
-        results = json.load(file)
+    instructable_results = []
+    for project_idea in project_ideas:
+        run_input = {
+            "search": project_idea,
+            "maxItems": 2,
+            "extendOutputFunction": "($) => { return {} }",
+            "customMapFunction": "(object) => { return {...object} }",
+            "proxy": { "useApifyProxy": True },
+        }
 
-    ideas = []
-    i = 1
-    for result in results:
-        ideas.append(
-            {
-                'id': i,
-                'title': result.get('title'),
-                'image': result.get('steps')[0].get('media')[0].get('src'),
-                'description': result.get('steps')[0].get('body'),
-                'url': result.get('url')
-            }
-        )
-        i+=1
+        # Run the Actor and wait for it to finish
+        run = api_client.actor("epctex/instructables-scraper").call(run_input=run_input)
 
-    # search_terms = request.args.get("search_terms")
-    # # Prepare the Actor input
-    # run_input = {
-    #     "search": search_terms,
-    #     "maxItems": 5,
-    #     "extendOutputFunction": "($) => { return {} }",
-    #     "customMapFunction": "(object) => { return {...object} }",
-    #     "proxy": { "useApifyProxy": True },
-    # }
+        # Fetch and print Actor results from the run's dataset (if there are any)
+        print("💾 Check your data here: https://console.apify.com/storage/datasets/" + run["defaultDatasetId"])
+        for item in api_client.dataset(run["defaultDatasetId"]).iterate_items():
+            print(item)
+            # need to format response before returning
 
-    # # Run the Actor and wait for it to finish
-    # run = api_client.actor("epctex/instructables-scraper").call(run_input=run_input)
-
-    # # Fetch and print Actor results from the run's dataset (if there are any)
-    # print("💾 Check your data here: https://console.apify.com/storage/datasets/" + run["defaultDatasetId"])
-    # for item in api_client.dataset(run["defaultDatasetId"]).iterate_items():
-    #     print(item)
-    #     # need to format response before returning
-
-    return jsonify(ideas)
+    return jsonify(instructable_results)
 
 def create_materials_database(materials_db):
     # connect to db
