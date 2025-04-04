@@ -55,7 +55,7 @@ function Tools( {onToolClick} ) {
                 img={tool.img}
                 name={tool.name}
                 onClick={() => onToolClick(tool)}
-                classes = "col-4 mb-3 text-center tool-box"
+                classes = "col-3 mb-3 text-center tool-box"
               />
             ))}
           </div>
@@ -75,9 +75,11 @@ const Tool = ({ id, i, img, name, onClick, classes, onDragEnd = null, style = {}
       dragMomentum={false} 
       whileDrag={{ scale: 1.2 }}
       onDragEnd={onDragEnd}
+      // class=
       style={{ 
         cursor: inPlayArea ? 'grab' : 'copy', ...style
-      }} className={classes} key={i}> 
+      }}
+      className={classes} key={i}> 
         <div class="tool-img-container">
           <img 
             src={process.env.PUBLIC_URL + img} 

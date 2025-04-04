@@ -80,14 +80,9 @@ const Material = ({ id, emoji, name, onClick, onDragEnd = null, style = {}, inPl
       dragMomentum={false} 
       whileDrag={{ scale: 1.2 }}
       onDragEnd={onDragEnd}
+      class="material-block"
       style={{ 
-        cursor: inPlayArea ? 'grab' : 'copy', 
-        display: 'inline-block', 
-        padding: '10px', 
-        margin: '5px', 
-        background: 'white', 
-        borderRadius: '3px', 
-        border: 'solid #ccc 1px',
+        cursor: inPlayArea ? 'grab' : 'copy',
         ...style
       }}
     >

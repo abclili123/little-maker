@@ -9,6 +9,12 @@
     padding: 15px 20px;
     padding-bottom: 5px;
   }
+
+  img {
+    user-drag: none; /* Safari */
+    -webkit-user-drag: none; /* Chrome, Edge, Opera */
+    -moz-user-drag: none; /* Firefox */
+  }
   
   /* Optional: Style the help button if needed */
   .btn.rounded-circle {
@@ -153,14 +159,14 @@
     max-height: 200px;
     overflow-y: auto;
     padding: 10px 0px;
-    margin-top: 10px;
+    margin: 10px 20px 0px;
   }
 
   .materials-container {
-    max-height: 200px;
+    max-height: 160px;
     overflow-y: auto;
     padding: 10px 0px;
-    margin-top: 10px;
+    margin: 10px 10px 0px 35px;
   }
 
   .tool-img-container {
@@ -207,8 +213,9 @@
     display: inline-block;
     padding: 5px 10px;
     margin: 8px 5px; 
-    background: #ddd;
+    background: white;
     border-radius: 5px;
+    border: solid #ccc 1px;
  }
 
  .light-head {
