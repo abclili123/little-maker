@@ -37,7 +37,7 @@ function Tools( {onToolClick} ) {
 
   // show all tools
   return (
-    <div>
+    <div class="tool-section-container">
       <h1 class="pad-left light-head">Tools</h1>
 
       <div className="search-bar">

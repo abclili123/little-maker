@@ -36,7 +36,7 @@ function Materials({ onMaterialClick }) {
   }
 
   return (
-    <div>
+    <div class="materials-section-container">
       <h1 class="header light-head">Materials</h1>
 
       <div class="row materials-bar">
