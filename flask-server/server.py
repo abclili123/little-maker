@@ -26,13 +26,25 @@ def materials():
     # connect to db
     conn = duckdb.connect(os.path.join(data_dir, 'materials.db'))
 
-    # get materials and tags
-    query = """
-        SELECT m.name, GROUP_CONCAT(mt.tag_name, ', ') as tags
-        FROM materials m
-        LEFT JOIN material_tags mt ON m.name = mt.material_name
-        GROUP BY m.name
-    """
+    search_query = request.args.get("search")
+    if search_query:
+        # if search term exists, modify the query to filter at the SQL level
+        query = f"""
+            SELECT m.name, GROUP_CONCAT(mt.tag_name, ', ') as tags
+            FROM materials m
+            LEFT JOIN material_tags mt ON m.name = mt.material_name
+            WHERE LOWER(m.name) ILIKE '%{search_query.lower()}%'
+            GROUP BY m.name
+        """
+    
+    else:
+        # get materials and tags
+        query = """
+            SELECT m.name, GROUP_CONCAT(mt.tag_name, ', ') as tags
+            FROM materials m
+            LEFT JOIN material_tags mt ON m.name = mt.material_name
+            GROUP BY m.name
+        """
 
     results = conn.execute(query).fetchall()
 
