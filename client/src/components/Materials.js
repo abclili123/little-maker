@@ -217,11 +217,15 @@ const TagFilter = ({ setData, setLoading, selectedTags, setSelectedTags, query }
           fontSize: '12px',
           padding: '1px',
           cursor: 'pointer',
-          textAlign: 'left',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        Filter by Tags {selectedTags.length > 0 ? `(${selectedTags.length})` : ''}
+        <span>Filter by Tags {selectedTags.length > 0 ? `(${selectedTags.length})` : ''}</span>
+        <span style={{ fontSize: '10px', marginLeft: '4px' }}>{open ? '▲' : '▼'}</span>
       </div>
+
   
       {open && (
         <ul
