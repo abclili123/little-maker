@@ -84,18 +84,30 @@ def tags():
 
     return jsonify([row[0] for row in results])
 
-
 @app.route("/tools")
 def tools():
-    # connect to db
+    import duckdb
     conn = duckdb.connect(os.path.join(data_dir, 'tools.db'))
 
-    # get tools
-    query = "SELECT * FROM tools;"
-    results = conn.execute(query).fetchall()
+    search_query = request.args.get("search")
+
+    if search_query:
+        query = "SELECT * FROM tools WHERE tool_name ILIKE '%' || ? || '%';"
+        params = [search_query]
+    else:
+        query = "SELECT * FROM tools;"
+        params = []
+
+    results = conn.execute(query, params).fetchall()
 
     tools_data = [
-        {"name": row[0], "link": row[1] or "", "description": row[2], "img": "assets/tool_images/" + row[0].lower().replace(" ", "_") + ".png"} for row in results
+        {
+            "name": row[0],
+            "link": row[1] or "",
+            "description": row[2],
+            "img": "assets/tool_images/" + row[0].lower().replace(" ", "_") + ".png"
+        }
+        for row in results
     ]
 
     return jsonify(tools_data)
