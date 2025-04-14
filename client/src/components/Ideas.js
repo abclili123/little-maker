@@ -79,7 +79,11 @@ const Idea = ({ id, title, image, description, url, ideas, setIdeas, onClose, ad
     >
       <img src={image} alt={title} className="card-image" />
       <div className="card-content">
-        <h2 className="card-title">{title}</h2>
+        <h2 className="card-title">
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {title}
+          </a>
+        </h2>
         <p className="card-description">{description}</p>
       </div>
     </motion.div>
