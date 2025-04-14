@@ -224,6 +224,7 @@
     font-weight: 200;
     align-items: center;
     padding-top: 12px;
+    z-index: 101;
  }
 
  .encyclopedia p {
