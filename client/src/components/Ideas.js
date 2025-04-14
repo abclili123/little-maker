@@ -29,7 +29,7 @@ const Ideas = ({ ideas, setIdeas, onClose, addToEncyclopedia }) => {
   );
 };
 
-const Idea = ({ id, title, image, description, ideas, setIdeas, onClose, addToEncyclopedia }) => {
+const Idea = ({ id, title, image, description, url, ideas, setIdeas, onClose, addToEncyclopedia }) => {
   const x = useMotionValue(0);
   const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
   const opacity = useTransform(x, [-150, 0, 150], [0, 1, 0]);
@@ -44,7 +44,7 @@ const Idea = ({ id, title, image, description, ideas, setIdeas, onClose, addToEn
   const handleDragEnd = () => {
     if (Math.abs(x.get()) > 100) {
       if (x.get() > 0) {
-        addToEncyclopedia({ id, title, image, description });
+        addToEncyclopedia({ id, title, image, description, url });
       }
 
       setIdeas((prev) => {

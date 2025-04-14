@@ -224,7 +224,7 @@ function App() {
           <div className="row tool-section border-bottom">
             <Tools onToolClick={handleToolClick} />
           </div>
-          <div className="row border-bottom">
+          <div className="row flex-grow-1 border-bottom">
             <Materials onMaterialClick={handleMaterialClick} />
           </div>
           <div className="row encyclopedia">

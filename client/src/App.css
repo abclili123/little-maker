@@ -162,6 +162,7 @@
 
   .tool-section-container {
     max-height: 40vh;
+    resize: vertical;
   }
 
   .tools-container {
@@ -172,12 +173,17 @@
     margin: 10px 20px 0px;
   }
 
+  .flex-grow-1 {
+    z-index: 100;
+    background-color: white;
+  }
+
   .materials-section-container {
-    max-height: 37vh;
+    max-height: 40vh;
   }
 
   .materials-container {
-    height: 60%;
+    height: 67%;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 10px 0px;
@@ -224,6 +230,19 @@
     margin: 0px;
  }
 
+ .encyclopedia a {
+    color: black;
+ }
+
+ .encyclopedia a:hover{
+  color: #149F84;
+  text-decoration: none;
+}
+
+.encyclopedia img:hover{
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
  .material-block {
     cursor: grab;
     display: inline-block;
@@ -250,7 +269,7 @@
  }
 
  .encyclopedia-container {
-  max-height: 80px;
+  max-height: 40vh;
   overflow: auto;
   display: flex;
   justify-content: space-between;
@@ -262,6 +281,8 @@
   max-width: 10rem;
   max-height: 10rem;
   border-radius: 5px;
+  padding: 1rem;
+  /* display: inline-block; */
  }
 
  .encyclopedia-image {

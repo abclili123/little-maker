@@ -17,7 +17,7 @@ const Encyclopedia = ( {ideas} ) => {
 
 const Idea = ({ id, title, image, description, url }) => {
     return(
-        <a href={url}>
+        <a href={url} target="_blank">
         <div className="encyclopedia-entry">
             <img src={image} alt={title} className="encyclopedia-image" />
             <p className="encyclopedia-entry-title">{title}</p>
