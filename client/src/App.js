@@ -89,10 +89,14 @@ function App() {
         itemRect.bottom > zoneRect.top;
   
       if (isOverlapping) {
-        itemElement.style.background = "linear-gradient(to top, lightgreen, white)"; // need to change to nicer color
+        itemElement.style.background = "rgb(255, 255, 195)"; // need to change to nicer color
+        itemElement.style.border = "1.5px solid rgb(9, 84, 70)"
+        itemElement.style.fontWeight = "475";
       }
       else {
         itemElement.style.background = "white";
+        itemElement.style.border = "1px solid rgb(204, 204, 204)"
+        itemElement.style.fontWeight = "400";
       }
     }
   }; 
@@ -216,11 +220,11 @@ function App() {
         </div>
 
         {/* Right Column - Sidebar */}
-        <div className="col-md-5 p-3 d-flex flex-column">
+        <div className="col-5 p-3 d-flex flex-column">
           <div className="row tool-section border-bottom">
             <Tools onToolClick={handleToolClick} />
           </div>
-          <div className="row border-bottom">
+          <div className="row flex-grow-1 border-bottom">
             <Materials onMaterialClick={handleMaterialClick} />
           </div>
           <div className="row encyclopedia">

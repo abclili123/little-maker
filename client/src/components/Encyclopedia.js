@@ -1,7 +1,9 @@
 const Encyclopedia = ( {ideas} ) => {
   return (
     <div width={'100%'}>
-      <h1 className="header light-head">Encyclopedia</h1>
+      <div className="row center">
+        <h1 className="header light-head">Encyclopedia</h1>
+      </div>
       <div className="encyclopedia-container">
       {ideas.map((idea) => (
         <Idea 
@@ -13,12 +15,14 @@ const Encyclopedia = ( {ideas} ) => {
   );
 };
 
-const Idea = ({ id, title, image, description }) => {
+const Idea = ({ id, title, image, description, url }) => {
     return(
+        <a href={url} target="_blank">
         <div className="encyclopedia-entry">
             <img src={image} alt={title} className="encyclopedia-image" />
             <p className="encyclopedia-entry-title">{title}</p>
         </div>
+        </a>
     )
 }
 

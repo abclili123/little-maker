@@ -31,7 +31,7 @@ function Materials({ onMaterialClick }) {
   }, []); // Empty dependency array means this runs once when the component mounts (runs once)
 
   return (
-    <div>
+    <div class="materials-section-container">
       <h1 className="header light-head">Materials</h1>
   
       <div className="row materials-bar">
@@ -89,14 +89,9 @@ const Material = ({ id, emoji, name, onClick, onDragEnd = null, style = {}, inPl
       dragMomentum={false} 
       whileDrag={{ scale: 1.2 }}
       onDragEnd={onDragEnd}
+      class="material-block"
       style={{ 
-        cursor: inPlayArea ? 'grab' : 'copy', 
-        display: 'inline-block', 
-        padding: '10px', 
-        margin: '5px', 
-        background: 'white', 
-        borderRadius: '3px', 
-        border: 'solid #ccc 1px',
+        cursor: inPlayArea ? 'grab' : 'copy',
         ...style
       }}
     >
