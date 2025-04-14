@@ -27,24 +27,19 @@ function Tools( {onToolClick} ) {
       });
   }, []); // Empty dependency array means this runs once when the component mounts (runs once)
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
   // show all tools
   return (
     <div class="tool-section-container">
       <h1 class="pad-left light-head">Tools</h1>
+      <ToolSearch setData={setData} setLoading={setLoading}/>
 
-      <div className="search-bar">
-        <input type="text" placeholder="Search Available Tools" />
-        <img src="/assets/ui_icons/search.svg" alt="Search" className="search-icon" />
-      </div>
-
+      {error && <div>Error: {error.message}</div>}
+  
+      {loading ? (
+        <div className="tools-container">Loading...</div>
+      ) : data.length === 0 ? (
+        <div className="tools-container">No tools found.</div>
+      ) : (
       <div class="tools-container">
         <div>
           <div className="row">
@@ -61,6 +56,7 @@ function Tools( {onToolClick} ) {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 }
@@ -90,6 +86,44 @@ const Tool = ({ id, i, img, name, onClick, classes, onDragEnd = null, style = {}
         </div>
         <p class="tool-label">{name}</p>
     </Component>
+  );
+};
+
+const ToolSearch = ({ setData, setLoading }) => {
+  const [query, setQuery] = useState("");
+
+  const searchTools = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      params.append("search", query);
+      const response = await fetch(`/tools?${params.toString()}`);
+      if (!response.ok) throw new Error("Search failed");
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      setData([]); // optional: or show a specific message
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      searchTools();
+    }
+  };
+
+  return (
+    <div className="search-bar">
+        <input type="text" placeholder="Search Available Tools" 
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <img src="/assets/ui_icons/search.svg" alt="Search" className="search-icon" />
+    </div>
   );
 };
 

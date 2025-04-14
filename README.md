@@ -1,7 +1,7 @@
 # little-maker
 
 ## Set up (mac)
-Create a `.env` file and add your API key as `INSTRUCTABLES_KEY`.
+Create a `.env` file and add your Open AI API key as `OPENAI_API_KEY`.
 Navigate to `flask-server`
 ```cd flask-server```
 Create venv

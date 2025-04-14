@@ -23,83 +23,91 @@ def home():
 
 @app.route("/materials")
 def materials():
-    # connect to db
+    import duckdb
     conn = duckdb.connect(os.path.join(data_dir, 'materials.db'))
 
-    # get materials and tags
-    query = """
+    search_query = request.args.get("search")
+    tags = request.args.getlist("tags")
+
+    base_query = """
         SELECT m.name, GROUP_CONCAT(mt.tag_name, ', ') as tags
         FROM materials m
         LEFT JOIN material_tags mt ON m.name = mt.material_name
-        GROUP BY m.name
     """
 
-    results = conn.execute(query).fetchall()
+    where_clauses = []
+    params = []
+
+    if search_query is not None:
+        where_clauses.append("LOWER(m.name) LIKE '%' || ? || '%'")
+        params.append(search_query.lower())
+
+    if tags:
+        placeholders = ",".join("?" for _ in tags)
+        where_clauses.append(f"mt.tag_name IN ({placeholders})")
+        params.extend(tags)
+
+    if where_clauses:
+        base_query += " WHERE " + " AND ".join(where_clauses)
+
+    base_query += " GROUP BY m.name"
+
+    results = conn.execute(base_query, params).fetchall()
 
     TAG_EMOJI_MAP = {
-        "3D Printing": "🖨️",
-        "Adhesive": "🩹",
-        "Jewelry": "💍",
-        "Electronics": "🔌",
-        "Paper": "📄",
-        "Bookbinding": "📚",
-        "Marbling": "🌊",
-        "Paint": "🎨",
-        "Vinyl": "💿",
-        "Screen Printing": "🖼️",
-        "Sewing": "🧵",
-        "Embroidery": "🪡",
-        "Textile": "🧶",
-        "Other": "🛠️",
-        "Stained Glass": "🪟",
-        "Rug Tufting": "🪞",
-        "Embroidery": "🪡",
-        "Dye Sublimation": "🎭",
-        "Leatherworking": "👞",
-        "Woodworking": "🪓",
-        "Fasteners": "🔩",
-        "Sanding": "🪚",
-        "Lasercutting": "🔦",
-        "CNC": "🛠️"
+        "3D Printing": "🖨️", "Adhesive": "🩹", "Jewelry": "💍", "Electronics": "🔌",
+        "Paper": "📄", "Bookbinding": "📚", "Marbling": "🌊", "Paint": "🎨", "Vinyl": "💿",
+        "Screen Printing": "🖼️", "Sewing": "🧵", "Embroidery": "🪡", "Textile": "🧶",
+        "Other": "🛠️", "Stained Glass": "🪟", "Rug Tufting": "🪞", "Dye Sublimation": "🎭",
+        "Leatherworking": "👞", "Woodworking": "🪓", "Fasteners": "🔩", "Sanding": "🪚",
+        "Lasercutting": "🔦", "CNC": "🛠️"
     }
 
     materials_data = []
-    for row in results:
-        tags = []
-        if row[1]:
-            temp_tags = row[1].split(",")
-            for tag in temp_tags:
-                tags.append(tag.strip())
-
-        materials_data.append(
-            {
-                "name": row[0], 
-                "tags": tags, 
-                "emoji": TAG_EMOJI_MAP.get(tags[0]) if len(tags) > 0 else ""
-            }
-        )
+    for name, tag_string in results:
+        tags = [tag.strip() for tag in tag_string.split(",")] if tag_string else []
+        materials_data.append({
+            "name": name,
+            "tags": tags,
+            "emoji": TAG_EMOJI_MAP.get(tags[0]) if tags else ""
+        })
 
     conn.close()
-
-    # TODO: fix query/ move logic so not iterating over whole db for search 
-    # filter by name if query is provided
-    query_name = request.args.get("name")
-    if query_name:
-        materials_data = [m for m in materials_data if query_name.lower() in m["name"].lower()]
-
     return jsonify(materials_data)
+
+@app.route("/tags")
+def tags():
+    conn = duckdb.connect(os.path.join(data_dir, 'materials.db'))
+    query = "SELECT DISTINCT tag_name FROM tags ORDER BY tag_name;"
+    results = conn.execute(query).fetchall()
+    conn.close()
+
+    return jsonify([row[0] for row in results])
 
 @app.route("/tools")
 def tools():
-    # connect to db
+    import duckdb
     conn = duckdb.connect(os.path.join(data_dir, 'tools.db'))
 
-    # get tools
-    query = "SELECT * FROM tools;"
-    results = conn.execute(query).fetchall()
+    search_query = request.args.get("search")
+
+    if search_query:
+        query = "SELECT * FROM tools WHERE tool_name ILIKE '%' || ? || '%';"
+        params = [search_query]
+    else:
+        query = "SELECT * FROM tools;"
+        params = []
+
+    results = conn.execute(query, params).fetchall()
 
     tools_data = [
-        {"name": row[0], "link": row[1] or "", "description": row[2], "img": "assets/tool_images/" + row[0].lower().replace(" ", "_") + ".png"} for row in results
+        {
+            "name": row[0],
+            "link": row[1] or "",
+            "description": row[2],
+            "img": "assets/tool_images/" + row[0].lower().replace(" ", "_") + ".png"
+        }
+        for row in results
     ]
 
     return jsonify(tools_data)
