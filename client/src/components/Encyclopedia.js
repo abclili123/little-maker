@@ -1,14 +1,16 @@
 const Encyclopedia = ( {ideas} ) => {
   return (
     <div width={'100%'}>
-      <div className="row center">
+      <div className="row">
         <h1 className="header light-head">Encyclopedia</h1>
       </div>
-      <div className="encyclopedia-container">
+      <div className="encyclopedia-container row">
       {ideas.map((idea) => (
-        <Idea 
-        key={idea.id}
-        {...idea} />
+        <div className="col-4">
+          <Idea 
+          key={idea.id}
+          {...idea} />
+        </div>
       ))}
     </div>
     </div>
